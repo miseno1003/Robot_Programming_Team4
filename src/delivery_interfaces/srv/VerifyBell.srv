@@ -1,0 +1,9 @@
+# === 요청 ===
+# 로봇 정면 카메라 이미지
+sensor_msgs/Image image
+---
+# === 응답 ===
+# 화면 속 빨간 물체가 '눌러야 하는 벨'이 맞으면 true
+bool is_bell
+# 벨의 화면상 위치: "없음" | "왼쪽" | "중앙" | "오른쪽"
+string position

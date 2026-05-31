@@ -1,0 +1,11 @@
+# === 요청 ===
+# 영수증이 찍힌 카메라 이미지
+sensor_msgs/Image image
+---
+# === 응답 ===
+# 분석 성공 여부 (호수/경비실 인식 실패 시 false)
+bool success
+# 목적지 문자열: "101", "102" ... 또는 "경비실". 실패 시 빈 문자열
+string destination
+# 벨(초인종)을 눌러야 하면 true
+bool press_bell

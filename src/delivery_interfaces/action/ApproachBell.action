@@ -1,0 +1,16 @@
+# === 목표(Goal) ===
+# 목적지: "101" | "102" | ... | "경비실" | "HOME"
+#   - "HOME" 이면 초기 위치로만 복귀 (벨 동작 없음)
+string destination
+# 벨을 눌러야 하면 true (destination 이 "HOME" 이면 무시)
+bool press_bell
+---
+# === 결과(Result) ===
+bool success
+string message
+---
+# === 피드백(Feedback) ===
+# 현재 진행 단계 설명
+string stage
+# 정면 LiDAR 거리 [m] (모를 때 -1.0)
+float32 front_distance
