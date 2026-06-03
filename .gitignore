@@ -59,3 +59,7 @@ COLCON_IGNORE
 *.log
 .env
 .env.local
+
+
+src/navigation2/
+src/turtlebot3/

@@ -9,79 +9,6 @@ Robot Programming Team4
 - **Middleware**: ROS2 Jazzy
 - **System**: Automated delivery system (receipt recognition → navigation to destination → bell pressing → return home)
 
-## 📁 Project Structure
-
-```
-src/
-├── delivery_interfaces/          # ROS 2 interface definitions
-│   ├── CMakeLists.txt
-│   ├── package.xml
-│   ├── action/
-│   │   └── ApproachBell.action   # Doorbell approach action
-│   └── srv/
-│       ├── AnalyzeReceipt.srv    # Receipt analysis service
-│       └── VerifyBell.srv        # Doorbell verification service
-│
-├── delivery_nav/                 # Autonomous navigation package
-│   ├── package.xml
-│   ├── setup.cfg
-│   ├── setup.py
-│   ├── delivery_nav/
-│   │   ├── __init__.py
-│   │   ├── nav_node.py           # Navigation node
-│   │   ├── red_detector.py       # Red object detection
-│   │   └── config.py             # Configuration management
-│   └── resource/
-│
-├── delivery_sm/                  # State machine package
-│   ├── package.xml
-│   ├── setup.cfg
-│   ├── setup.py
-│   ├── delivery_sm/
-│   │   ├── __init__.py
-│   │   ├── state_machine_node.py # State machine implementation
-│   │   └── receipt_ui.py         # Receipt UI
-│   ├── launch/
-│   │   └── delivery.launch.py    # Launch file
-│   └── resource/
-│
-├── delivery_vlm/                 # Vision Language Model package
-│   ├── package.xml
-│   ├── setup.cfg
-│   ├── setup.py
-│   ├── delivery_vlm/
-│   │   ├── __init__.py
-│   │   ├── vlm_node.py           # VLM main node
-│   │   ├── bell_vlm.py           # Doorbell detection VLM
-│   │   └── config.py             # Model configuration
-│   └── resource/
-│
-├── requirements.txt              # Python dependencies
-├── .gitignore
-└── README.md
-```
-
-## Package Roles
-
-| Package | Type | Role |
-|---------|------|------|
-| `delivery_interfaces` | ament_cmake | Service/Action interface definitions |
-| `delivery_vlm` | ament_python | Receipt/Doorbell recognition via VLM |
-| `delivery_nav` | ament_python | Autonomous navigation and path planning |
-| `delivery_sm` | ament_python | State machine and system coordination |
-
-## Node Communication Flow
-
-```
-[state_machine_node]
-   │  (Receipt capture GUI)
-   ├── srv  /analyze_receipt ─────▶ [vlm_node]
-   ├── action /approach_bell ─────▶ [nav_node]
-   │                                    │
-   │                                    ├── srv /verify_bell ──▶ [vlm_node]
-   │                                    └── action navigate_to_pose ──▶ [Nav2]
-   └── topic /delivery_status ◀──────── [nav_node]
-```
 
 ## 🚀 How to Run
 
@@ -97,22 +24,39 @@ pip install -r requirements.txt
 
 ```bash
 cd ~/turtlebot3_ws
-# Build delivery_interfaces first
 colcon build --packages-select delivery_interfaces
 source install/setup.bash
-# Build remaining packages
 colcon build --symlink-install
 source install/setup.bash
 ```
 
 ### 3. Execution
 
+Open **4 terminals** and run in order.
+
+**[Terminal 1] SBC (Raspberry Pi) — Robot bringup**
+```bash
+export TURTLEBOT3_MODEL=burger
+export LDS_MODEL=LDS-02
+ros2 launch turtlebot3_bringup robot.launch.py
+```
+
+**[Terminal 2] SBC (Raspberry Pi) — Camera**
+```bash
+ros2 launch turtlebot3_bringup camera.launch.py
+```
+
+**[Terminal 3] Remote PC — Nav2**
+```bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_navigation2 navigation2.launch.py map:=~/map/map.yaml
+```
+
+**[Terminal 4] Remote PC — Delivery system** *(after Terminals 1–3 are ready)*
 ```bash
 cd ~/turtlebot3_ws
 source install/setup.bash
 export ANTHROPIC_API_KEY=sk-ant-...
-
-# Start the system
 ros2 launch delivery_sm delivery.launch.py
 ```
 
