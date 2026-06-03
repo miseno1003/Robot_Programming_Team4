@@ -12,7 +12,16 @@ Robot Programming Team4
 
 ## 🚀 How to Run
 
-### 1. Prerequisites
+### 1. Clone External Packages
+
+```bash
+cd ~/turtlebot3_ws/src
+git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3.git
+git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+git clone -b jazzy https://github.com/ros-navigation/navigation2.git
+```
+
+### 2. Prerequisites
 
 ```bash
 sudo apt update
@@ -20,7 +29,7 @@ sudo apt install ros-jazzy-cv-bridge ros-jazzy-nav2-msgs
 pip install -r requirements.txt
 ```
 
-### 2. Build
+### 3. Build
 
 ```bash
 cd ~/turtlebot3_ws
@@ -30,7 +39,7 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-### 3. Execution
+### 4. Execution
 
 Open **4 terminals** and run in order.
 
